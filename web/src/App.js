@@ -8,11 +8,18 @@ import contractMeta from "./contract_meta.json";
 const TWITTER_HANDLE = '_buildspace';
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 
-const CONTRACT_ADDRESS = "0x0d6F479CADd728B87FD60E9748d049ebE0EAC14D";
+const CONTRACT_ADDRESS = "0xF4Ee9052BA82C66d44f074a0a843E9D33D5bE117";
+
+const VIEW_COLLECTION_URL = "https://testnets.opensea.io/collection/threeflavoricecreamnft-y1nal595gq";
 
 export default function App() {
 
   const [currentAccount, setCurrentAccount] = useState("");
+
+  const [maxNftCount, setMaxNftCount] = useState(0);
+  const [mintedNftCount, setMintedNftCount] = useState(0);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const checkIfWalletIsConnected = async () => {
     const { ethereum } = window;
@@ -22,6 +29,9 @@ export default function App() {
       console.log("Make sure you have MetaMask!");
       return
     }
+
+    // Query NFT counts
+    getNftCounts();
 
     try {
       // Get connected accounts
@@ -69,12 +79,35 @@ export default function App() {
 
       // Update state
       setCurrentAccount(account);
+
+      // Query NFT counts
+      getNftCounts();
     } catch (error) {
       console.log(error)
     }
   }
 
-  const askContractToMintNft = async () => {
+  const getNftCounts = async () => {
+    try {
+      // Get contract
+      const myEpicNftContract = createContract();
+
+      // Get NFT counts from contract
+      const maxNftCount = await myEpicNftContract.getMaxEpicNFTCount();
+      const mintedNftCount = await myEpicNftContract.getMintedEpicNFTCount();
+
+      console.log("NFTs max: ", Number(maxNftCount));
+      console.log("NFTs minted: ", Number(mintedNftCount));
+
+      // Update state
+      setMaxNftCount(Number(maxNftCount));
+      setMintedNftCount(Number(mintedNftCount));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const mintNft = async () => {
     try {
       // Get contract
       const myEpicNftContract = createContract();
@@ -83,8 +116,11 @@ export default function App() {
       let nftTxn = await myEpicNftContract.makeAnEpicNFT();
 
       // Wait for mining of transaction
-      console.log("Mining ... please wait.")
+      console.log("Mining ... ", nftTxn.hash);
+      setIsLoading(true);
       await nftTxn.wait();
+      setIsLoading(false);
+      console.log("Mined ", nftTxn.hash);
       
       // Log Etherscan URL
       const ethScanUrl = `https://rinkeby.etherscan.io/tx/${nftTxn.hash}`;
@@ -93,6 +129,36 @@ export default function App() {
       console.log(error)
     }
   }
+
+  const onNewNftMintedHandler = (from, tokenId) => {
+    console.log("New NFT minted.");
+    setMintedNftCount(prev => prev + 1);
+  };
+
+  const registerOnNewNftMintedHandler = () => {
+    const { ethereum } = window;
+
+    // Check if we have access to window.ethereum
+    if (!ethereum) {
+      return () => {};
+    }
+
+    // Get contract
+    const myEpicNftContract = createContract();
+
+    // Subscribe event 'NewEpicNFTMinted'
+    myEpicNftContract.on("NewEpicNFTMinted", onNewNftMintedHandler);
+
+    return () => {
+      // Unsubscribe event 'NewEpicNFTMinted'
+      myEpicNftContract.off("NewEpicNFTMinted", onNewNftMintedHandler);
+    };
+  }
+
+  // This runs our function when the page loads
+  useEffect(() => {
+    registerOnNewNftMintedHandler();
+  });
 
   function createContract() {
     // Get Web3 provider/signer
@@ -104,17 +170,34 @@ export default function App() {
     return new ethers.Contract(CONTRACT_ADDRESS, contractMeta.abi, signer);
   }
 
-  const renderConnectedWalletContainer = () => (
-    <button onClick={connectWallet} className="connect-wallet-button">
+  const renderNftCounter = () => (
+    <p className="small-text">Only {maxNftCount-mintedNftCount} / {maxNftCount} available.</p>
+  )
+
+  const renderConnectedWalletButton = () => (
+    <button className="button connect-wallet-button" onClick={connectWallet}>
       Connect to Wallet
     </button>
   );
 
-  const renderMintContainer = () => (
-    <button onClick={askContractToMintNft} className="mint-button">
+  const renderMintNftButton = () => (
+    <button
+      className="button mint-button"
+      disabled={isLoading}
+      onClick={mintNft}>
       Mint NFT
     </button>
   );
+
+  const renderViewButton = () => (
+    <a
+      className="link-button view-button"
+      href={VIEW_COLLECTION_URL}
+      target="_blank"
+      rel="noreferrer">
+      🌊 View Collection on OpenSea
+    </a>
+  )
 
   return (
     <div className="main-container">
@@ -123,7 +206,21 @@ export default function App() {
         <p>
           Each unique. Each beautiful. Discover your NFT today.
         </p>
-        {currentAccount === "" ? renderConnectedWalletContainer() : renderMintContainer()}
+        {!currentAccount && (
+          <div className="center-container">
+            {renderConnectedWalletButton()}
+          </div>
+        )}
+        {currentAccount && (
+          <div className="center-container">
+            {renderNftCounter()}
+            {renderMintNftButton()}
+        
+            <div className={isLoading ? "loader loader-on" : "loader loader-off"} />
+
+            {renderViewButton()}
+          </div>
+        )}
       </div>
       <div className="footer-container">
         <img className="twitter-logo" src="twitter-logo.svg" alt="Twitter Logo" />

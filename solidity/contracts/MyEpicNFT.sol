@@ -15,6 +15,10 @@ contract MyEpicNFT is ERC721URIStorage {
 
     Counters.Counter private _tokenIds;
 
+    uint256 private _maxEpicNFTs = 50;
+
+    event NewEpicNFTMinted(address sender, uint256 tokenId);
+
     struct Flavor {
         string name;
         string color;
@@ -78,6 +82,12 @@ contract MyEpicNFT is ERC721URIStorage {
     }
 
     function makeAnEpicNFT() public {
+        // Check if NFTs can still be minted.
+        require(
+            _tokenIds.current() < _maxEpicNFTs,
+            "No more Epic NFTs are available."
+        );
+
         // Get the current tokenId, this starts at 0.
         uint256 newItemId = _tokenIds.current();
 
@@ -120,6 +130,9 @@ contract MyEpicNFT is ERC721URIStorage {
         _setTokenURI(newItemId, tokenUri);
         
         console.log("An Epic NFT with ID %s has been minted to %s.", newItemId, msg.sender);
+
+        // Emit event that a new NFT was minted.
+        emit NewEpicNFTMinted(msg.sender, newItemId);
     
         // Increment the counter for when the next NFT is minted.
         _tokenIds.increment();
@@ -145,6 +158,16 @@ contract MyEpicNFT is ERC721URIStorage {
 
     function random(string memory input) internal pure returns (uint256) {
         return uint256(keccak256(abi.encodePacked(input)));
+    }
+
+    function getMaxEpicNFTCount() public view returns (uint256) {
+        console.log("Contract can have %d max Epic NFTs.", _maxEpicNFTs);
+        return _maxEpicNFTs;
+    }
+
+    function getMintedEpicNFTCount() public view returns (uint256) {
+        console.log("Contract has %d minted Epic NFTs.", _tokenIds.current());
+        return _tokenIds.current();
     }
 
 }

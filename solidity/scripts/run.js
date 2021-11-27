@@ -3,8 +3,14 @@ async function main() {
   const nftContract = await nftContractFactory.deploy();
   await nftContract.deployed();
 
-  let txn = await nftContract.makeAnEpicNFT();
-  await txn.wait();
+  let txn1 = await nftContract.makeAnEpicNFT();
+  await txn1.wait();
+
+  let txn2 = await nftContract.makeAnEpicNFT();
+  await txn2.wait();
+
+  maxNftCount = await nftContract.getMaxEpicNFTCount();
+  mintedNftCount = await nftContract.getMintedEpicNFTCount();
 }
 
 main()

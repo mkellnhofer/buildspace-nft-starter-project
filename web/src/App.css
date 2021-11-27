@@ -2,6 +2,7 @@ h1 {
   text-align: center;
   font-size: 38px;
   font-weight: 600;
+  color: white;
 }
 
 p {
@@ -10,17 +11,9 @@ p {
   color: white;
 }
 
-button {
-  height: 45px;
-  width: auto;
-  padding-left: 40px;
-  padding-right: 40px;
-  border-style: none;
-  border-radius: 5px;
-  font-size: 16px;
-  font-weight: bold;
+a {
+  font-size: 14px;
   color: white;
-  cursor: pointer;
 }
 
 .main-container {
@@ -35,14 +28,20 @@ button {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 30px;
+  margin-top: 30px;
 }
 
 .footer-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-bottom: 30px;
+  margin-bottom: 30px;
+}
+
+.center-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .gradient-text {
@@ -52,16 +51,76 @@ button {
   -webkit-text-fill-color: transparent;
 }
 
+.small-text {
+  font-size: 14px;
+}
+
+.button {
+  height: 45px;
+  padding-left: 40px;
+  padding-right: 40px;
+  border-style: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+}
+
+.link-button {
+  padding-left: 40px;
+  padding-right: 40px;
+  border-style: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  padding: 17px;
+  text-decoration: none;
+}
+
 .connect-wallet-button {
   background: -webkit-linear-gradient(left, #60c657, #35aee2);
   background-size: 200% 200%;
   animation: gradient-animation 4s ease infinite;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .mint-button {
   background: -webkit-linear-gradient(left, #a200d6, #ff6fdf);
   background-size: 200% 200%;
   animation: gradient-animation 4s ease infinite;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.view-button {
+  background: -webkit-linear-gradient(left, #a200d6, #ff6fdf);
+  background-size: 200% 200%;
+  animation: gradient-animation 4s ease infinite;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.loader {
+  align-self: center;
+  width: 20px;
+  height: 20px;
+  margin: 10px;
+  border: 4px solid #a200d6;
+  border-top: 4px solid  #ff6fdf;
+  border-radius: 50%;
+  animation: spin 2s linear infinite;
+}
+
+.loader-on {
+  visibility: visible;
+}
+
+.loader-off {
+  visibility: hidden;
 }
 
 .twitter-logo {
@@ -79,4 +138,9 @@ button {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
