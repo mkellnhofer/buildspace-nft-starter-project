@@ -5,21 +5,19 @@ import "./App.css";
 
 import contractMeta from "./contract_meta.json";
 
-const TWITTER_HANDLE = '_buildspace';
-const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
-
 const CONTRACT_ADDRESS = "0xF4Ee9052BA82C66d44f074a0a843E9D33D5bE117";
 
 const VIEW_COLLECTION_URL = "https://testnets.opensea.io/collection/threeflavoricecreamnft-y1nal595gq";
+const VIEW_TX_URL = "https://rinkeby.etherscan.io/tx/";
 
-export default function App() {
-
+ const App = () => {
   const [currentAccount, setCurrentAccount] = useState("");
 
   const [maxNftCount, setMaxNftCount] = useState(0);
   const [mintedNftCount, setMintedNftCount] = useState(0);
 
   const [isLoading, setIsLoading] = useState(false);
+  const [nftTxnHash, setNftTxnHash] = useState("");
 
   const checkIfWalletIsConnected = async () => {
     const { ethereum } = window;
@@ -52,12 +50,12 @@ export default function App() {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
-  // This runs our function when the page loads
   useEffect(() => {
     checkIfWalletIsConnected();
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const connectWallet = async () => {
     const { ethereum } = window;
@@ -85,7 +83,7 @@ export default function App() {
     } catch (error) {
       console.log(error)
     }
-  }
+  };
 
   const getNftCounts = async () => {
     try {
@@ -105,7 +103,7 @@ export default function App() {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const mintNft = async () => {
     try {
@@ -121,14 +119,15 @@ export default function App() {
       await nftTxn.wait();
       setIsLoading(false);
       console.log("Mined ", nftTxn.hash);
+
+      setNftTxnHash(nftTxn.hash);
       
       // Log Etherscan URL
-      const ethScanUrl = `https://rinkeby.etherscan.io/tx/${nftTxn.hash}`;
-      console.log("NFT minted, see transaction: ", ethScanUrl);
+      console.log("NFT minted, see transaction: ", VIEW_TX_URL + nftTxn.hash);
     } catch (error) {
       console.log(error)
     }
-  }
+  };
 
   const onNewNftMintedHandler = (from, tokenId) => {
     console.log("New NFT minted.");
@@ -153,12 +152,12 @@ export default function App() {
       // Unsubscribe event 'NewEpicNFTMinted'
       myEpicNftContract.off("NewEpicNFTMinted", onNewNftMintedHandler);
     };
-  }
+  };
 
-  // This runs our function when the page loads
   useEffect(() => {
     registerOnNewNftMintedHandler();
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function createContract() {
     // Get Web3 provider/signer
@@ -175,62 +174,80 @@ export default function App() {
   )
 
   const renderConnectedWalletButton = () => (
-    <button className="button connect-wallet-button" onClick={connectWallet}>
-      Connect to Wallet
+    <button className="button" onClick={connectWallet}>
+      Connect Wallet
     </button>
   );
 
   const renderMintNftButton = () => (
     <button
-      className="button mint-button"
+      className="button"
       disabled={isLoading}
       onClick={mintNft}>
       Mint NFT
     </button>
   );
 
-  const renderViewButton = () => (
-    <a
-      className="link-button view-button"
-      href={VIEW_COLLECTION_URL}
-      target="_blank"
-      rel="noreferrer">
-      🌊 View Collection on OpenSea
-    </a>
-  )
+  const renderLoader = () => (
+    <div className="loader" />
+  );
+
+  const buildEtherscanTxnUrl = () => {
+    return VIEW_TX_URL + nftTxnHash;
+  }
 
   return (
     <div className="main-container">
-      <div className="header-container">
-        <h1 className="gradient-text">My NFT Collection</h1>
-        <p>
-          Each unique. Each beautiful. Discover your NFT today.
-        </p>
-        {!currentAccount && (
-          <div className="center-container">
-            {renderConnectedWalletButton()}
-          </div>
-        )}
-        {currentAccount && (
-          <div className="center-container">
-            {renderNftCounter()}
-            {renderMintNftButton()}
-        
-            <div className={isLoading ? "loader loader-on" : "loader loader-off"} />
+      <img className="logo" src="ice_cream.svg" alt="ice cream" />
+      <h1 className="colorized-text">Three Flavor Ice Cream NFTs</h1>
+      <p className="large-text">Each unique. Each delicious. Discover your ice cream NFT today.</p>
+      <p className="medium-text">Better be quick, they are melting!</p>
 
-            {renderViewButton()}
-          </div>
-        )}
-      </div>
-      <div className="footer-container">
-        <img className="twitter-logo" src="twitter-logo.svg" alt="Twitter Logo" />
+      {!currentAccount && (
+        <div className="connect-wallet-container">
+          {renderConnectedWalletButton()}
+        </div>
+      )}
+
+      {currentAccount && renderNftCounter()}
+
+      {currentAccount && (
+        <div className="mint-container">
+          {!isLoading ? renderMintNftButton() : renderLoader()}
+        </div>
+      )}
+
+      <p>
+        <span>Find all Three Flavor Ice Cream NFTs at </span>
         <a
-          className="twitter-text"
-          href={TWITTER_LINK}
+          href={VIEW_COLLECTION_URL}
           target="_blank"
-          rel="noreferrer"
-        >{`built on @${TWITTER_HANDLE}`}</a>
+          rel="noreferrer">
+            OpenSea
+        </a>
+        <span>.</span>
+      </p>
+
+      {currentAccount && nftTxnHash !== "" && (
+        <div>
+          <p>Your NFT has been minted. See following transaction at Etherscan.</p>
+          <a
+            href={buildEtherscanTxnUrl()}
+            target="_blank"
+            rel="noreferrer">
+              {buildEtherscanTxnUrl()}
+          </a>
+        </div>
+      )}
+
+      <div className="about-container">
+        <p>
+          <span>build with 🦄 </span>
+          <a href="https://buildspace.so" className="colorized-text">buildspace</a>
+        </p>
       </div>
     </div>
   );
 }
+
+export default App;

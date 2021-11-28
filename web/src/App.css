@@ -1,58 +1,64 @@
+div {
+  align-items: center;
+  text-align: center;
+}
+
 h1 {
   text-align: center;
   font-size: 38px;
   font-weight: 600;
-  color: white;
 }
 
 p {
-  text-align: center;
-  font-size: 25px;
-  color: white;
+  line-height: 1.5;
 }
 
 a {
-  font-size: 14px;
-  color: white;
+  color: #ff266e;
 }
 
 .main-container {
-  height: 100%;
-  background-color: #0d1116;
-  display: flex;
-  flex-direction: column;
-}
-
-.header-container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   margin-top: 30px;
+  margin-left: 30px;
+  margin-right: 30px;
 }
 
-.footer-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 30px;
+.logo {
+  width: 200px;
+  height: 200px;
 }
 
-.center-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.large-text {
+  font-size: 22px;
 }
 
-.gradient-text {
-  background: -webkit-linear-gradient(left, #60c657 30%, #35aee2 60%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.medium-text {
+  font-size: 18px;
 }
 
 .small-text {
   font-size: 14px;
+}
+
+.colorized-text {
+  color: #fd9fc6;
+  background-image: linear-gradient(270deg, #ffe77a, #fd9fc6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.connect-wallet-container {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.mint-container {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.about-container {
+  margin-top: 30px;
 }
 
 .button {
@@ -63,75 +69,21 @@ a {
   border-radius: 5px;
   font-size: 16px;
   font-weight: bold;
-  color: white;
   cursor: pointer;
-}
-
-.link-button {
-  padding-left: 40px;
-  padding-right: 40px;
-  border-style: none;
-  border-radius: 5px;
-  font-size: 16px;
-  font-weight: bold;
-  color: white;
-  cursor: pointer;
-  padding: 17px;
-  text-decoration: none;
-}
-
-.connect-wallet-button {
-  background: -webkit-linear-gradient(left, #60c657, #35aee2);
-  background-size: 200% 200%;
+  background: -webkit-linear-gradient(left, #fd9fc6, #ffe77a);
+  background-size: 150% 150%;
   animation: gradient-animation 4s ease infinite;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.mint-button {
-  background: -webkit-linear-gradient(left, #a200d6, #ff6fdf);
-  background-size: 200% 200%;
-  animation: gradient-animation 4s ease infinite;
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-.view-button {
-  background: -webkit-linear-gradient(left, #a200d6, #ff6fdf);
-  background-size: 200% 200%;
-  animation: gradient-animation 4s ease infinite;
-  margin-top: 20px;
-  margin-bottom: 20px;
 }
 
 .loader {
-  align-self: center;
-  width: 20px;
-  height: 20px;
-  margin: 10px;
-  border: 4px solid #a200d6;
-  border-top: 4px solid  #ff6fdf;
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  border: 5px solid #fd9fc6;
+  border-top: 5px solid  #eb5090;
   border-radius: 50%;
   animation: spin 2s linear infinite;
-}
-
-.loader-on {
-  visibility: visible;
-}
-
-.loader-off {
-  visibility: hidden;
-}
-
-.twitter-logo {
-  width: 35px;
-  height: 35px;
-}
-
-.twitter-text {
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
+  margin: 5px 5px 2px 5px;
 }
 
 @keyframes gradient-animation {
