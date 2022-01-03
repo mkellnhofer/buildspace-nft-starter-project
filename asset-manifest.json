@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/buildspace-nft-starter-project/static/css/main.5f8ef1e1.chunk.css",
+    "main.js": "/buildspace-nft-starter-project/static/js/main.782bd0cc.chunk.js",
+    "main.js.map": "/buildspace-nft-starter-project/static/js/main.782bd0cc.chunk.js.map",
+    "runtime-main.js": "/buildspace-nft-starter-project/static/js/runtime-main.69675781.js",
+    "runtime-main.js.map": "/buildspace-nft-starter-project/static/js/runtime-main.69675781.js.map",
+    "static/js/2.9a498103.chunk.js": "/buildspace-nft-starter-project/static/js/2.9a498103.chunk.js",
+    "static/js/2.9a498103.chunk.js.map": "/buildspace-nft-starter-project/static/js/2.9a498103.chunk.js.map",
+    "index.html": "/buildspace-nft-starter-project/index.html",
+    "static/css/main.5f8ef1e1.chunk.css.map": "/buildspace-nft-starter-project/static/css/main.5f8ef1e1.chunk.css.map",
+    "static/js/2.9a498103.chunk.js.LICENSE.txt": "/buildspace-nft-starter-project/static/js/2.9a498103.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.69675781.js",
+    "static/js/2.9a498103.chunk.js",
+    "static/css/main.5f8ef1e1.chunk.css",
+    "static/js/main.782bd0cc.chunk.js"
+  ]
+}
